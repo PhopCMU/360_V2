@@ -44,3 +44,5 @@ docker-compose.yml
 
 # nginx
 /nginx
+# Configuration files
+/config

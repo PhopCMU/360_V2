@@ -670,28 +670,6 @@ export default function FacultyPage() {
             </div>
           </div>
 
-          {/* Criteria legend */}
-          <div className="mb-5 bg-white rounded-xl border border-slate-200 px-4 py-3 shadow-sm">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
-              สมรรถนะที่ประเมิน
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1.5">
-              {Menus.map((menu, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-start gap-2 text-xs text-slate-600"
-                >
-                  <span className="w-5 h-5 flex-shrink-0 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-[12px] font-bold">
-                    {idx + 1}
-                  </span>
-                  <span className="leading-snug text-sm">
-                    {menu.label.split(". ")[1] || menu.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
           <div className="flex gap-2 flex-shrink-0 mb-5 justify-end">
             <label className="flex items-center gap-2  bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm cursor-pointer hover:bg-slate-50 transition-colors shadow-sm">
               <input
