@@ -1,0 +1,122 @@
+@import "tailwindcss";
+@import "material-symbols";
+
+@font-face {
+  font-family: "Noto Sans Thai";
+  src: url("/fonts/NotoSansThai/NotoSansThai-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Noto Sans Thai";
+  src: url("/fonts/NotoSansThai/NotoSansThai-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Noto Sans Thai";
+  src: url("/fonts/NotoSansThai/NotoSansThai-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Noto Sans Thai";
+  src: url("/fonts/NotoSansThai/NotoSansThai-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Noto Sans Thai";
+  src: url("/fonts/NotoSansThai/NotoSansThai-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Noto Sans Thai";
+  src: url("/fonts/NotoSansThai/NotoSansThai-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Noto Sans Thai";
+  src: url("/fonts/NotoSansThai/NotoSansThai-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Noto Sans Thai";
+  src: url("/fonts/NotoSansThai/NotoSansThai-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Noto Sans Thai";
+  src: url("/fonts/NotoSansThai/NotoSansThai-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+:root {
+  --brand-navy: #0f2557;
+  --brand-blue: #1a56db;
+  --brand-teal: #0d9488;
+  --brand-amber: #f59e0b;
+  --surface-bg: #f1f5f9;
+  --surface-card: #ffffff;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
+  --border-soft: #e2e8f0;
+}
+
+body {
+  font-family: "Noto Sans Thai", sans-serif;
+  background-color: var(--surface-bg);
+  color: var(--text-primary);
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+.animate-blob {
+  animation: blob 7s infinite;
+}
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+.bg-300\% {
+  background-size: 300%;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.animate-gradient {
+  animation: gradient 6s ease infinite;
+}

@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Dotenv files — ignore actual secrets but keep example files tracked
+.env
+.env.*
+!.env.example
+
+*.env.prod
+/Reports
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+ # Docker files
+docker-compose.override.yml
+docker-compose.dev.yml
+docker-compose.prod.yml
+docker-compose.local.yml
+Dockerfile.dev
+Dockerfile.prod
+Dockerfile.local
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# nginx
+/nginx
