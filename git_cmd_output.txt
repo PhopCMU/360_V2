@@ -1,0 +1,8 @@
+RUNNING IN: D:\01-Developer\UI_MAIN\360
+=== COMMAND: git status --porcelain ===
+?? git_cmd_output.txt
+=== EXIT CODE: 0 ===
+=== COMMAND: git status --short ===
+?? git_cmd_output.txt
+=== EXIT CODE: 0 ===
+=== COMMAND: git add -A ===
