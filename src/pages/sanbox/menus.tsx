@@ -63,6 +63,14 @@ export const TabsSanbox = [
   },
 
   {
+    key: "นักบริหารงานทั่วไป",
+    label: "นักบริหารงานทั่วไป",
+    icon: "schema",
+    color: "gray",
+    points: Point_1,
+  },
+
+  {
     key: "นักประชาสัมพันธ์",
     label: "นักประชาสัมพันธ์",
     icon: "schema",
