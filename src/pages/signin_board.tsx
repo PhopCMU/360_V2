@@ -5,7 +5,7 @@ import { images } from "../constant";
 import { AuthServiceCmu } from "../routers/authServer";
 
 const LoginPage = () => {
-  const [loginMethod] = useState("cmu-account");
+  // const [loginMethod] = useState("cmu-account");
   // const [credentials, setCredentials] = useState({
   //   cmuaccount: "",
   // });
