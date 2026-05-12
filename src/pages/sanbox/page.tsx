@@ -665,13 +665,13 @@ export default function SanboxPage() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <span
-                  className="material-symbols-outlined text-purple-800 text-xl"
+                  className="material-symbols-outlined text-orange-800 text-xl"
                   aria-hidden="true"
                 >
                   folder_open
                 </span>
-                <h1 className="text-base sm:text-lg font-bold text-purple-800 truncate">
-                  โรงพยาบาลสัตว์มหาวิทยาลัยเชียงใหม่
+                <h1 className="text-base sm:text-lg font-bold text-orange-800 truncate">
+                  กลุ่มภารกิจยุทธศาสตร์เชิงรุก (บริหารรูปแบบ Sanbox)
                 </h1>
               </div>
               <p className="text-xs text-slate-500 mt-0.5 ml-7">
