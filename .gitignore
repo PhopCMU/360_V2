@@ -45,4 +45,5 @@ docker-compose.yml
 # nginx
 /nginx
 # Configuration files
-/config
+/src/config
+git_cmd_output.txt
