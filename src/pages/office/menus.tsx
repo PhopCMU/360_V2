@@ -55,6 +55,13 @@ export const Tabs = [
     points: Point_1,
   },
   {
+    key: "นักวิทยาศาสตร์",
+    label: "นักวิทยาศาสตร์",
+    icon: "work",
+    color: "gray",
+    points: Point_1,
+  },
+  {
     key: "นักบริหารงานทั่วไป",
     label: "นักบริหารงานทั่วไป",
     icon: "work",

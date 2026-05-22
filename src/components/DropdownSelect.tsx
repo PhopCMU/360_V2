@@ -37,7 +37,7 @@ export default function DropdownSelect({
   value,
   onChange,
   placeholder = "เลือกกลุ่ม...",
-  widthClass = "w-full md:w-72",
+  widthClass = "w-full md:w-120",
   className = "",
 }: DropdownSelectProps) {
   const [open, setOpen] = useState(false);
@@ -77,20 +77,24 @@ export default function DropdownSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
       >
-        <div className="flex items-center gap-2 truncate">
+        <div className="flex items-start gap-2 min-w-0 flex-1">
           {selected ? (
             <>
               <span
-                className={`material-symbols-outlined mr-2 ${
+                className={`material-symbols-outlined mr-2 shrink-0 ${
                   colorClassMap[selected.color || ""] ?? "text-gray-500"
                 }`}
               >
                 {selected.icon}
               </span>
-              <span className="truncate">{selected.label || selected.key}</span>
+              <span className="break-words whitespace-normal">
+                {selected.label || selected.key}
+              </span>
             </>
           ) : (
-            <span className="text-gray-500 truncate">{placeholder}</span>
+            <span className="text-gray-500 break-words whitespace-normal">
+              {placeholder}
+            </span>
           )}
         </div>
         <span className="material-symbols-outlined">expand_more</span>
@@ -107,7 +111,7 @@ export default function DropdownSelect({
               className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
             />
           </div>
-          <div className="max-h-56 overflow-auto">
+          <div className="max-h-100 overflow-auto">
             {filtered.map((opt) => {
               const isActive = opt.key === value;
               const iconColor =
@@ -121,16 +125,18 @@ export default function DropdownSelect({
                     setOpen(false);
                     setSearch("");
                   }}
-                  className={`w-full text-left px-4 py-2 hover:bg-slate-50 flex items-center gap-3 ${
+                  className={`w-full text-left px-4 py-2 hover:bg-slate-50 flex items-start gap-3 ${
                     isActive ? "bg-slate-100 font-medium" : ""
                   }`}
                 >
                   <span
-                    className={`material-symbols-outlined ${isActive ? iconColor : "text-gray-400"}`}
+                    className={`material-symbols-outlined shrink-0 ${isActive ? iconColor : "text-gray-400"}`}
                   >
                     {opt.icon}
                   </span>
-                  <span className="truncate">{opt.label || opt.key}</span>
+                  <span className="break-words whitespace-normal">
+                    {opt.label || opt.key}
+                  </span>
                 </button>
               );
             })}
