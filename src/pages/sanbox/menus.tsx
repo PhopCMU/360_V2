@@ -103,6 +103,74 @@ export const TabsSanbox = [
   },
 ];
 
+// ศูนย์ดูแลสัตว์เลี้ยง
+export const TabsPetcmu = [
+  {
+    key: "สัตวแพทย์",
+    label: "สัตวแพทย์",
+    icon: "schema",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "นักจัดการงานทั่วไป",
+    label: "นักจัดการงานทั่วไป",
+    icon: "schema",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "พนักงานบริการทั่วไป",
+    label: "พนักงานบริการทั่วไป",
+    icon: "schema",
+    color: "gray",
+    points: Point_3,
+  },
+];
+
+// ศูนย์เฝ้าระวังสุขภาพหนึ่งเดียว
+export const TabsPodd = [
+  {
+    key: "สัตวแพทย์",
+    label: "สัตวแพทย์",
+    icon: "schema",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "นักพัฒนาระบบ",
+    label: "นักพัฒนาระบบ",
+    icon: "schema",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "นักการเงินและบัญชี",
+    label: "นักการเงินและบัญชี",
+    icon: "schema",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "นักจัดการงานทั่วไป",
+    label: "นักจัดการงานทั่วไป",
+    icon: "schema",
+    color: "gray",
+    points: Point_1,
+  },
+];
+
+// ศูนย์สัตวแพทย์สาธารณสุขและอาหารปลอดภัย
+export const TabsVphcap = [
+  {
+    key: "นักบริหารงานทั่วไป",
+    label: "นักบริหารงานทั่วไป",
+    icon: "schema",
+    color: "gray",
+    points: Point_1,
+  },
+];
+
 export const Menus = [
   {
     key: "ความรับผิดชอบ ตรงต่อเวลา การรักษาระเบียบวินัย ",
@@ -178,18 +246,18 @@ export const Groups = [
     icon: "science",
     color: "purple",
   },
-  {
-    key: "ศูนย์ฝึกสัตวแพทย์และฟาร์มทดลอง",
-    label: "ศูนย์ฝึกสัตวแพทย์และฟาร์มทดลอง",
-    icon: "school",
-    color: "indigo",
-  },
-  {
-    key: "ศูนย์ความเป็นเลิศด้านเวชศาสตร์แมว",
-    label: "ศูนย์ความเป็นเลิศด้านเวชศาสตร์แมว",
-    icon: "groups",
-    color: "pink",
-  },
+  // {
+  //   key: "ศูนย์ฝึกสัตวแพทย์และฟาร์มทดลอง",
+  //   label: "ศูนย์ฝึกสัตวแพทย์และฟาร์มทดลอง",
+  //   icon: "school",
+  //   color: "indigo",
+  // },
+  // {
+  //   key: "ศูนย์ความเป็นเลิศด้านเวชศาสตร์แมว",
+  //   label: "ศูนย์ความเป็นเลิศด้านเวชศาสตร์แมว",
+  //   icon: "groups",
+  //   color: "pink",
+  // },
   {
     key: "ศูนย์สัตวแพทย์สาธารณสุขและอาหารปลอดภัย",
     label: "ศูนย์สัตวแพทย์สาธารณสุขและอาหารปลอดภัย",

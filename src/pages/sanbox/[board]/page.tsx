@@ -1073,7 +1073,7 @@ export default function SanboxBoardPage() {
                   : "bg-slate-200 text-slate-400 cursor-not-allowed"
               }`}
             >
-              ส่งคะแนนที่เลือก ({checkedRows.size} คน)
+              ส่งคะแนน ({checkedRows.size})
             </button>
           </div>
         </div>

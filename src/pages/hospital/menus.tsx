@@ -250,6 +250,136 @@ export const Tabs = [
   },
 ];
 
+export const TabsNovel = [
+  {
+    key: "สัตวแพทย์ (ชำนาญการพิเศษ)",
+    label: "สัตวแพทย์ (ชำนาญการพิเศษ)",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_4,
+  },
+  {
+    key: "สัตวแพทย์",
+    label: "สัตวแพทย์",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "นักการพยาบาลสัตว์",
+    label: "นักการพยาบาลสัตว์",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "นักวิทยาศาสตร์",
+    label: "นักวิทยาศาสตร์",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "นักรังสีการแพทย์",
+    label: "นักรังสีการแพทย์",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "นักเทคนิคการแพทย์",
+    label: "นักเทคนิคการแพทย์",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "เภสัชกร",
+    label: "เภสัชกร",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "เจ้าหน้าที่สำนักงาน",
+    label: "เจ้าหน้าที่สำนักงาน",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_2,
+  },
+  {
+    key: "พนักงานบริการฝีมือ (ด้านวิทยาศาสตร์และการแพทย์)",
+    label: "พนักงานบริการฝีมือ (ด้านวิทยาศาสตร์และการแพทย์)",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_3,
+  },
+  {
+    key: "ผู้ปฏิบัติงานสัตวแพทย์",
+    label: "ผู้ปฏิบัติงานสัตวแพทย์",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_3,
+  },
+  {
+    key: "พนักงานบริการทั่วไป",
+    label: "พนักงานบริการทั่วไป",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_3,
+  },
+];
+
+export const TabsVmdh = [
+  {
+    key: "สัตวแพทย์ (ชำนาญการพิเศษ)",
+    label: "สัตวแพทย์ (ชำนาญการพิเศษ)",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_4,
+  },
+  {
+    key: "นักวิทยาศาสตร์",
+    label: "นักวิทยาศาสตร์",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "พนักงานบริการฝีมือ (ด้านวิทยาศาสตร์และการแพทย์)",
+    label: "พนักงานบริการฝีมือ (ด้านวิทยาศาสตร์และการแพทย์)",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_3,
+  },
+];
+export const TabsEle = [
+  {
+    key: "พนักงานบริการทั่วไป",
+    label: "พนักงานบริการทั่วไป",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_3,
+  },
+];
+
+export const TabsLah = [
+  {
+    key: "สัตวแพทย์",
+    label: "สัตวแพทย์",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_1,
+  },
+  {
+    key: "พนักงานบริการทั่วไป",
+    label: "พนักงานบริการทั่วไป",
+    icon: "health_and_safety",
+    color: "gray",
+    points: Point_3,
+  },
+];
+
 export const Menus = [
   {
     key: "ความรับผิดชอบ ตรงต่อเวลา การรักษาระเบียบวินัย ",
