@@ -311,6 +311,7 @@ export default function SanboxPage() {
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, []);
+
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const ITEMS_PER_PAGE = 10;

@@ -314,7 +314,6 @@ export default function HospitalPage() {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCompetenciesOpen, setIsCompetenciesOpen] = useState(true);
-
   const [isMobile, setIsMobile] = useState(
     () => window.matchMedia("(max-width: 767px)").matches,
   );

@@ -2,7 +2,16 @@ import { useEffect, useRef, useState, memo, useCallback, useMemo } from "react";
 import Navbar from "../../../components/Navbar";
 import { fetchDataAgency } from "../../../routers/GetRouter";
 import type { User } from "../../../model/authModel";
-import { Groups, Menus, Menus_9, Tabs } from "./../menus";
+import {
+  Groups,
+  Menus,
+  Menus_9,
+  Tabs,
+  TabsEle,
+  TabsLah,
+  TabsNovel,
+  TabsVmdh,
+} from "./../menus";
 import DropdownSelect from "../../../components/DropdownSelect";
 import { ScoreRouterBoardCryptoJS } from "../../../routers/PostRouter";
 import CryptoJS from "crypto-js";
@@ -266,13 +275,31 @@ const UserCard = memo(
 
 export default function HospitalBoardPage() {
   const { userData } = useUser();
-  const [activeTab, setActiveTab] = useState<string>(
-    Tabs.map((tab) => tab.key)[0] || "สัตวแพทย์",
-  );
   const [groupBy, setGroupBy] = useState<string>(
-    Groups.map((group) => group.key)[0] ||
-      "ศูนย์การเรียนรู้และส่งเสริมสุขภาพภาคเหนือ",
+    Groups[0]?.key || "ศูนย์การเรียนรู้และส่งเสริมสุขภาพภาคเหนือ",
   );
+  const [activeTab, setActiveTab] = useState<string>(
+    groupBy === "ศูนย์สุขภาพช้างและสัตว์ป่า"
+      ? TabsEle[0].key
+      : groupBy === "โรงพยาบาลสัตว์ใหญ่และปศุสัตว์"
+        ? TabsLah[0].key
+        : groupBy === "ศูนย์เวชศาสตร์ชันสูตรและนวัตกรรมด้านสุขภาพสัตว์"
+          ? TabsVmdh[0].key
+          : TabsNovel[0]?.key || "",
+  );
+
+  // เพิ่ม useEffect ตัวนี้เข้าไปเพื่อดักจับการเปลี่ยนแปลงของ groupBy
+  useEffect(() => {
+    if (groupBy === "ศูนย์สุขภาพช้างและสัตว์ป่า") {
+      setActiveTab(TabsEle[0].key);
+    } else if (groupBy === "โรงพยาบาลสัตว์ใหญ่และปศุสัตว์") {
+      setActiveTab(TabsLah[0].key);
+    } else if (groupBy === "ศูนย์เวชศาสตร์ชันสูตรและนวัตกรรมด้านสุขภาพสัตว์") {
+      setActiveTab(TabsVmdh[0].key);
+    } else {
+      setActiveTab(TabsNovel[0]?.key || "");
+    }
+  }, [groupBy]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [checkedRows, setCheckedRows] = useState<
     Set<{ accountId: string; fullname_th: string }>
@@ -290,6 +317,17 @@ export default function HospitalBoardPage() {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCompetenciesOpen, setIsCompetenciesOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia("(max-width: 767px)").matches,
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const ITEMS_PER_PAGE = 10;
@@ -729,7 +767,16 @@ export default function HospitalBoardPage() {
           <div className="flex flex-col sm:flex-row gap-3 mb-5">
             <div className="flex-shrink-0 w-full sm:w-auto">
               <DropdownSelect
-                options={Tabs}
+                options={
+                  groupBy === "ศูนย์สุขภาพช้างและสัตว์ป่า"
+                    ? TabsEle
+                    : groupBy === "โรงพยาบาลสัตว์ใหญ่และปศุสัตว์"
+                      ? TabsLah
+                      : groupBy ===
+                          "ศูนย์เวชศาสตร์ชันสูตรและนวัตกรรมด้านสุขภาพสัตว์"
+                        ? TabsVmdh
+                        : TabsNovel
+                }
                 value={activeTab}
                 onChange={(k) => setActiveTab(k as any)}
               />
@@ -750,6 +797,35 @@ export default function HospitalBoardPage() {
               />
             </div>
           </div>
+
+          {/* PC: Inline Competencies Panel */}
+          {!isMobile && (
+            <div className="mb-5 bg-white border border-slate-200 rounded-xl shadow-sm p-4">
+              <div className="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
+                <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-teal-500 text-base">
+                    eye_tracking
+                  </span>
+                  สมรรถนะที่ประเมิน
+                </h3>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                {displayedMenu.map((menu, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-2 text-xs text-slate-600 border border-slate-100 rounded-md px-3 py-2 bg-slate-50"
+                  >
+                    <span className="w-5 h-5 flex-shrink-0 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-[12px] font-bold">
+                      {idx + 1}
+                    </span>
+                    <span className="leading-snug text-sm">
+                      {menu.label.split(". ")[1] || menu.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Content Area */}
           <div className="flex gap-2 flex-shrink-0 mb-5 justify-end">
@@ -851,136 +927,119 @@ export default function HospitalBoardPage() {
             )}
           </div>
 
-          {/* Floating search panel (hidden until opened) */}
-          {isSearchOpen && (
-            <div className="fixed top-22 right-6 z-60 w-80 md:w-96">
-              <div className="bg-white border border-slate-200 rounded-xl shadow-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold">ค้นหา</h3>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setIsSearchOpen(false)}
-                      className="p-1 rounded-md text-slate-500 hover:bg-slate-50"
-                      aria-label="ปิดการค้นหา"
-                    >
-                      <span className="material-symbols-outlined">close</span>
-                    </button>
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <label className=" text-xs font-bold text-slate-600 uppercase tracking-widest mb-2">
-                    เลือกศูนย์/หน่วยงาน
-                  </label>
-                  <div className="flex-shrink-0 w-full sm:w-auto">
-                    <DropdownSelect
-                      options={Groups}
-                      value={groupBy}
-                      onChange={(k) => setGroupBy(k as any)}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <input
-                    ref={searchInputRef}
-                    type="search"
-                    placeholder="ค้นหาด้วยชื่อ, เลขประจำตัว..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-3 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400/40"
-                  />
-                </div>
-
-                <div className="mt-3">
-                  <DropdownSelect
-                    options={Tabs}
-                    value={activeTab}
-                    onChange={(k) => setActiveTab(k as any)}
-                    widthClass="w-full"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {!isSearchOpen && (
-            <div className="fixed top-22 right-6 z-50 group">
-              <div className="fixed top-22 right-6 z-50 ">
-                <div
-                  onClick={() => setIsSearchOpen(true)}
-                  className="bg-white border border-slate-200 rounded-xl shadow-lg py-1 px-4 
-                            cursor-pointer transition-all duration-300 hover:scale-105 
-                            hover:shadow-xl hover:border-blue-300 group"
-                >
-                  <div
-                    className="flex items-center justify-center text-slate-500 
-                                 group-hover:text-blue-500 gap-1 transition-colors duration-300"
-                  >
-                    <span className="material-symbols-outlined">search</span>
-                    <h3 className="text-sm font-semibold">ค้นหา</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Competencies Panel - Open by default, can be closed */}
-          {isCompetenciesOpen && (
-            <div className="fixed top-32 right-6 z-40 w-80 md:w-96 animate-in fade-in slide-in-from-top-2 duration-300">
-              <div className="bg-white border border-slate-200 rounded-xl shadow-lg p-4">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
-                  <h3 className="text-sm font-semibold text-slate-700">
-                    สมรรถนะที่ประเมิน
-                  </h3>
-                  <button
-                    onClick={() => setIsCompetenciesOpen(false)}
-                    className="p-1 rounded-md text-slate-500 hover:bg-slate-50 transition-colors"
-                    aria-label="ปิดสมรรถนะที่ประเมิน"
-                  >
-                    <span className="material-symbols-outlined">close</span>
-                  </button>
-                </div>
-
-                {/* Competencies List */}
-                <div className="space-y-2 max-h-96 overflow-y-auto">
-                  {displayedMenu.map((menu, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-start gap-2 text-xs text-slate-600 border border-slate-100 rounded-md px-3 py-2 bg-slate-50 hover:bg-slate-100 transition-colors"
-                    >
-                      <span className="w-5 h-5 flex-shrink-0 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-[12px] font-bold">
-                        {idx + 1}
-                      </span>
-                      <span className="leading-snug text-sm">
-                        {menu.label.split(". ")[1] || menu.label}
-                      </span>
+          {/* Mobile-only: Floating search & competencies panels */}
+          {isMobile && (
+            <>
+              {/* Floating search panel */}
+              {isSearchOpen && (
+                <div className="fixed top-20 right-6 z-60 w-80">
+                  <div className="bg-white border border-slate-200 rounded-xl shadow-lg p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold">ค้นหา</h3>
+                      <button
+                        onClick={() => setIsSearchOpen(false)}
+                        className="p-1 rounded-md text-slate-500 hover:bg-slate-50"
+                        aria-label="ปิดการค้นหา"
+                      >
+                        <span className="material-symbols-outlined">close</span>
+                      </button>
                     </div>
-                  ))}
+                    <div>
+                      <input
+                        ref={searchInputRef}
+                        type="search"
+                        placeholder="ค้นหาด้วยชื่อ, เลขประจำตัว..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-3 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400/40"
+                      />
+                    </div>
+                    <div className="mt-3">
+                      <DropdownSelect
+                        options={
+                          groupBy === "ศูนย์สุขภาพช้างและสัตว์ป่า"
+                            ? TabsEle
+                            : groupBy === "โรงพยาบาลสัตว์ใหญ่และปศุสัตว์"
+                              ? TabsLah
+                              : groupBy ===
+                                  "ศูนย์เวชศาสตร์ชันสูตรและนวัตกรรมด้านสุขภาพสัตว์"
+                                ? TabsVmdh
+                                : TabsNovel
+                        }
+                        value={activeTab}
+                        onChange={(k) => setActiveTab(k as any)}
+                        widthClass="w-full"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+              )}
 
-          {!isCompetenciesOpen && (
-            <div className="fixed top-32 right-6 z-50">
-              <div
-                onClick={() => setIsCompetenciesOpen(true)}
-                className="bg-teal-500 border border-teal-200 rounded-xl shadow-lg py-1 px-4 
-                                        cursor-pointer transition-all duration-300 hover:scale-105 
-                                        hover:shadow-xl hover:border-teal-300 group"
-              >
-                <div
-                  className="flex items-center justify-center text-white 
-                                             group-hover:text-teal-100 gap-1 transition-colors duration-300"
-                >
-                  <span className="material-symbols-outlined">
-                    eye_tracking
-                  </span>
-                  <h3 className="text-sm font-semibold">สมรรถนะที่ประเมิน</h3>
+              {/* Search toggle button (icon only) */}
+              {!isSearchOpen && (
+                <div className="fixed top-20 right-6 z-50">
+                  <div
+                    onClick={() => setIsSearchOpen(true)}
+                    className="bg-white border border-slate-200 rounded-xl shadow-lg p-2.5 flex justify-center items-center cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-blue-300 group"
+                    aria-label="เปิดค้นหา"
+                  >
+                    <span className="material-symbols-outlined text-slate-500 group-hover:text-blue-500 transition-colors duration-300">
+                      search
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </div>
+              )}
+
+              {/* Competencies Panel */}
+              {isCompetenciesOpen && (
+                <div className="fixed top-32 right-6 z-40 w-80 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="bg-white border border-slate-200 rounded-xl shadow-lg p-4">
+                    <div className="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
+                      <h3 className="text-sm font-semibold text-slate-700">
+                        สมรรถนะที่ประเมิน
+                      </h3>
+                      <button
+                        onClick={() => setIsCompetenciesOpen(false)}
+                        className="p-1 rounded-md text-slate-500 hover:bg-slate-50 transition-colors"
+                        aria-label="ปิดสมรรถนะที่ประเมิน"
+                      >
+                        <span className="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                    <div className="space-y-2 max-h-80 overflow-y-auto">
+                      {displayedMenu.map((menu, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-2 text-xs text-slate-600 border border-slate-100 rounded-md px-3 py-2 bg-slate-50 hover:bg-slate-100 transition-colors"
+                        >
+                          <span className="w-5 h-5 flex-shrink-0 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-[12px] font-bold">
+                            {idx + 1}
+                          </span>
+                          <span className="leading-snug text-sm">
+                            {menu.label.split(". ")[1] || menu.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Competencies toggle button (icon only) */}
+              {!isCompetenciesOpen && (
+                <div className="fixed top-32 right-6 z-50">
+                  <div
+                    onClick={() => setIsCompetenciesOpen(true)}
+                    className="bg-teal-500 border border-teal-200 rounded-xl shadow-lg p-2.5 flex justify-center items-center cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-teal-300 group"
+                    aria-label="เปิดสมรรถนะที่ประเมิน"
+                  >
+                    <span className="material-symbols-outlined text-white group-hover:text-teal-100 transition-colors duration-300">
+                      eye_tracking
+                    </span>
+                  </div>
+                </div>
+              )}
+            </>
           )}
 
           {/* Pagination controls */}
