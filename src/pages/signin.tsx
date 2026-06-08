@@ -4,7 +4,7 @@ import { images } from "../constant";
 import { AuthServiceCmu } from "../routers/authServer";
 
 const LoginPage: React.FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const authUrlBase = import.meta.env.VITE_AUTH_URL ?? "";
   const clientId = import.meta.env.VITE_CLIENT_ID ?? "";
@@ -234,7 +234,7 @@ const LoginPage: React.FC = () => {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           />
                         </svg>
-                        <span>กำลังเชื่อมต่อ...</span>
+                        <span>ปิดระบบ...</span>
                       </>
                     ) : (
                       <>

@@ -61,7 +61,7 @@ const LoginPage = () => {
   // };
 
   return (
-    <div className="min-h-screen bg-[#0f2557] flex items-center justify-center py-8 sm:py-12 px-3 sm:px-4 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-[#003a30] flex items-center justify-center py-8 sm:py-12 px-3 sm:px-4 lg:px-8 relative overflow-hidden">
       {/* Geometric background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full border border-white/5" />
@@ -106,7 +106,7 @@ const LoginPage = () => {
         >
           <div className="flex flex-col lg:flex-row min-h-[560px]">
             {/* Left Panel — Brand Hero */}
-            <div className="lg:w-[45%] bg-[#0f2557] p-8 sm:p-10 lg:p-12 text-white relative overflow-hidden flex flex-col justify-between">
+            <div className="lg:w-[45%] bg-[#003a30] p-8 sm:p-10 lg:p-12 text-white relative overflow-hidden flex flex-col justify-between">
               {/* subtle teal glow bottom-left */}
               <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-teal-500/10 blur-3xl pointer-events-none" />
               <div className="absolute top-0 right-0 w-48 h-48 rounded-full border border-white/5 -mr-20 -mt-20 pointer-events-none" />
@@ -151,7 +151,7 @@ const LoginPage = () => {
                   <h1 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-bold leading-tight mb-3">
                     ระบบประเมิน
                     <br />
-                    <span className="text-teal-300">คณะกรรมการตามระเบียบ</span>
+                    <span className="text-blue-300">คณะกรรมการตามระเบียบ</span>
                   </h1>
                   <p className="text-sm text-white/55 leading-relaxed max-w-xs">
                     พัฒนาศักยภาพบุคลากรด้วยการประเมินที่รอบด้าน โปร่งใส

@@ -40,12 +40,12 @@
     },
     {
       "id": "vercel-composition-patterns",
-      "path": "./vercel-composition-patterns/SKILL.md",
+      "path": "./composition-patterns/SKILL.md",
       "tags": ["autoskills", "architecture"]
     },
     {
       "id": "vercel-react-best-practices",
-      "path": "./vercel-react-best-practices/SKILL.md",
+      "path": "./react-best-practices/SKILL.md",
       "tags": ["autoskills", "react"]
     },
     {

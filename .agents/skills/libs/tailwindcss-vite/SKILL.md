@@ -1,5 +1,5 @@
 ---
-name: @tailwindcss/vite
+name: tailwindcss-vite
 description: Vite plugin integration for Tailwind used in `vite.config.ts`.
 ---
 

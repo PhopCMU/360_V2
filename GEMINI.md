@@ -1,60 +1,27 @@
-# GEMINI.md - Project Context
+## Autodetect agent skills
 
-## Project Overview
-**360assessment2** is a React-based web application, likely a dashboard or assessment system for the Faculty of Veterinary Medicine at Chiang Mai University (based on API endpoints). It uses a modular structure with protected routes and a centralized user context.
+This repository includes a small helper script that detects the project's tech stack and recommends matching agent skills from `.agents/skills/_index.json`.
 
-### Core Technologies
-- **Framework:** [React 19](https://react.dev/)
-- **Build Tool:** [Vite 6](https://vitejs.dev/)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/), [Framer Motion](https://www.framer.com/motion/) (animations)
-- **Icons:** [Material Symbols](https://fonts.google.com/icons)
-- **Routing:** [React Router Dom v7](https://reactrouter.com/)
-- **HTTP Client:** [Axios](https://axios-http.com/)
-- **Security:** [Crypto-JS](https://cryptojs.gitbook.io/docs/) (AES encryption for API parameters)
+Preview recommendations (no changes):
 
----
-
-## Architecture & Project Structure
-
-- **`src/main.tsx`**: Entry point and routing configuration. Defines public and protected layouts.
-- **`src/App.tsx`**: Main layout wrapper with background gradients.
-- **`src/pages/`**: Contains page components, organized by domain:
-  - `faculty/`, `hospital/`, `office/`, `sanbox/`, `vphcap/`: Domain-specific dashboards and boards.
-  - `home.tsx`, `home_board.tsx`: Landing pages.
-  - `signin.tsx`, `signin_board.tsx`: Authentication entry points.
-- **`src/components/`**: Reusable UI components (Modal, Navbar, AuthCheck).
-- **`src/context/`**: State management using React Context (`UserContext`).
-- **`src/routers/`**: API interaction logic (GetRouter, PostRouter, authServer).
-- **`src/config/`**: Configuration files (e.g., `conf.tsx` for API base URL).
-- **`src/model/`**: TypeScript interfaces and types for data models.
-- **`public/fonts/`**: Custom fonts, specifically **Noto Sans Thai**.
-
----
-
-## Building and Running
-
-### Development
 ```bash
-npm run dev
+# recommended (CommonJS) when `package.json` uses `type: "module"`
+npx ./scripts/autodetect-skills.cjs --dry-run
+
+# or run directly with Node
+node scripts/autodetect-skills.cjs --dry-run
 ```
 
-### Production Build
+Apply recommendations (writes `.agents/skills/auto-selection.json` and creates a helper skill):
+
 ```bash
-npm run build
+npx ./scripts/autodetect-skills.cjs --yes
+
+# or
+node scripts/autodetect-skills.cjs --yes
 ```
 
-### Linting
-```bash
-npm run lint
-```
+Notes:
 
----
-
-## Development Conventions
-
-- **State Management:** Use `useUser` hook from `src/context/UserContext.tsx` to access user info.
-- **Routing:** Follow the nested route pattern in `src/main.tsx`. Protected routes are wrapped in `UserProvider` and `App`.
-- **API Security:** Sensitive parameters sent via GET requests should be encrypted using AES via `crypto-js` (see `src/routers/GetRouter.tsx`).
-- **Styling:** Use Tailwind utility classes. Backgrounds often use gradients (defined in `App.tsx`).
-- **Authentication:** Token-based authentication using `localStorage` (`authToken`).
+- The script only recommends skills already registered in `.agents/skills/_index.json`.
+- To make `npx your-package` available globally, add a `bin` entry in `package.json` and publish the package.
