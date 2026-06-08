@@ -1,3 +1,8 @@
+---
+name: autodetect
+description: Auto-detect the project tech stack and recommend relevant agent skills from the skill index.
+---
+
 # Autodetect Installer Skill
 
 When to use: Run this helper to auto-detect the project's tech stack and recommend relevant agent skills from this repository's skill index.
