@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, memo, useCallback } from "react";
 import Navbar from "../../../components/Navbar";
 import { fetchDataAgency } from "../../../routers/GetRouter";
 import type { User } from "../../../model/authModel";
-import { Menus, Tabs } from "./../menus";
+import { Menus_board, Tabs } from "./../menus";
 import DropdownSelect from "../../../components/DropdownSelect";
 import {
   LoadingModal,
@@ -160,9 +160,9 @@ const UserCard = memo(
 
           {/* Score inputs grid */}
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((term) => {
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((term) => {
               const value = scores?.[String(term)] ?? "";
-              const expectationPoint = points[term - 1]?.point || "-";
+              const expectationPoint = points[term - 1]?.point || "5";
               return (
                 <div key={term} className="space-y-1">
                   <div className="relative">
@@ -374,6 +374,9 @@ export default function OfficeBoardPage() {
             7: "",
             8: "",
             9: "",
+            10: "",
+            11: "",
+            12: "",
             comment: "", // Initialize comment
           },
         }));
@@ -436,7 +439,7 @@ export default function OfficeBoardPage() {
         const targetPoints = tabForUser?.points || points;
 
         const newScores: any = {};
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 12; i++) {
           const term = String(i + 1);
           const expectationPoint = targetPoints[i]?.point;
           newScores[term] =
@@ -469,7 +472,20 @@ export default function OfficeBoardPage() {
         const isScoresInvalid =
           !scores ||
           typeof scores !== "object" ||
-          !["1", "2", "3", "4", "5", "6", "7", "8", "9"].every(
+          ![
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+          ].every(
             (key) =>
               key in scores &&
               scores[key] !== undefined &&
@@ -512,7 +528,20 @@ export default function OfficeBoardPage() {
           const isScoresInvalid =
             !scores ||
             typeof scores !== "object" ||
-            !["1", "2", "3", "4", "5", "6", "7", "8", "9"].every(
+            ![
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+            ].every(
               (key) =>
                 key in scores &&
                 scores[key] !== undefined &&
@@ -527,7 +556,7 @@ export default function OfficeBoardPage() {
             กรุณากรอกข้อมูลให้ครบก่อนส่ง
             ชื่อ: ${invalidScores.fullname_th || "ไม่พบชื่อ"}
             Account ID: ${invalidScores.accountId}
-            ปัญหา: คะแนนไม่ครบ 9 รายการ
+            ปัญหา: คะแนนไม่ครบ 12 รายการ
           `);
           return;
         }
@@ -671,6 +700,22 @@ export default function OfficeBoardPage() {
               />
             </div>
 
+            <button
+              onClick={() =>
+                window.open(
+                  "https://o365cmu-my.sharepoint.com/:b:/g/personal/sophon_m_cmu_ac_th/IQAIADbRS_NGRo5T7QnB4w0UATA7Bs8T28mfM0WClWEYTcg?e=mFwMKp",
+                  "_blank",
+                  "noopener,noreferrer",
+                )
+              }
+              className="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-colors shadow-sm"
+            >
+              <span className="material-symbols-outlined text-sm">
+                description
+              </span>
+              สมรรถนะหลัก
+            </button>
+
             <div className="relative flex-1">
               <span
                 className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-lg"
@@ -678,6 +723,7 @@ export default function OfficeBoardPage() {
               >
                 search
               </span>
+
               <input
                 type="search"
                 placeholder="ค้นหาด้วยชื่อ, เลขประจำตัว..."
@@ -700,7 +746,7 @@ export default function OfficeBoardPage() {
                 </h3>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {Menus.map((menu, idx) => (
+                {Menus_board.map((menu, idx) => (
                   <div
                     key={idx}
                     className="flex items-start gap-2 text-xs text-slate-600 border border-slate-100 rounded-md px-3 py-2 bg-slate-50"
@@ -746,6 +792,9 @@ export default function OfficeBoardPage() {
                             7: "",
                             8: "",
                             9: "",
+                            10: "",
+                            11: "",
+                            12: "",
                             comment: "",
                           };
                       });
@@ -891,7 +940,7 @@ export default function OfficeBoardPage() {
                       </button>
                     </div>
                     <div className="space-y-2 max-h-80 overflow-y-auto">
-                      {Menus.map((menu, idx) => (
+                      {Menus_board.map((menu, idx) => (
                         <div
                           key={idx}
                           className="flex items-start gap-2 text-xs text-slate-600 border border-slate-100 rounded-md px-3 py-2 bg-slate-50 hover:bg-slate-100 transition-colors"

@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState, memo, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, memo, useCallback, useMemo, createContext, use } from "react";
 import Navbar from "../../components/Navbar";
 import { fetchDataAgency } from "../../routers/GetRouter";
 import type { User } from "../../model/authModel";
 import {
   Groups,
   Menus,
-  Menus_9,
+  Menus_board,
   TabsPetcmu,
   TabsPodd,
   TabsSanbox,
@@ -29,240 +29,254 @@ interface ScoreData {
 
 // Helper function to determine score count based on agency
 const getScoreCount = (level3agency_th: string): number => {
-  return level3agency_th === "ศูนย์ดูแลสัตว์เลี้ยง" ? 5 : 9;
+  return level3agency_th === "ศูนย์ดูแลสัตว์เลี้ยง" ? 5 : 12;
 };
 
 // Helper function to determine menu based on agency
 const getMenuForAgency = (level3agency_th: string | undefined) => {
-  return level3agency_th === "ศูนย์ดูแลสัตว์เลี้ยง" ? Menus : Menus_9;
+  return level3agency_th === "ศูนย์ดูแลสัตว์เลี้ยง" ? Menus : Menus_board;
 };
 
-// Memoized Card Component to prevent stuttering
-const UserCard = memo(
-  ({
-    user,
-    isChecked,
-    currentComment,
-    scores,
-    points,
-    onToggle,
-    onUpdateScore,
-    onUpdateComment,
-    onApplyTarget,
-  }: {
-    user: any;
-    isChecked: boolean;
-    currentComment: string;
-    scores: any;
-    points: any[];
-    onToggle: (id: string, name: string) => void;
-    onUpdateScore: (id: string, term: string, value: string) => void;
-    onUpdateComment: (id: string, value: string) => void;
-    onApplyTarget: (id: string, fullname_th: string) => void;
-  }) => {
-    const scoreCount = getScoreCount(user.level3agency_th || "");
-    return (
-      <div
-        className={`group relative bg-white rounded-2xl overflow-hidden transition-all duration-200 ${
-          isChecked
-            ? "ring-2 ring-teal-500 ring-offset-2 shadow-lg"
-            : "shadow-sm hover:shadow-md border border-slate-200 hover:border-slate-300"
+// ---- UserCard Compound Component (composition pattern) ----
+interface UserCardState {
+  user: any;
+  isChecked: boolean;
+  scores: any;
+  comment: string;
+  points: any[];
+}
+
+interface UserCardActions {
+  onToggle: (id: string, name: string) => void;
+  onUpdateScore: (id: string, term: string, value: string) => void;
+  onUpdateComment: (id: string, value: string) => void;
+  onApplyTarget: (id: string, fullname_th: string) => void;
+}
+
+const UserCardContext = createContext<{
+  state: UserCardState;
+  actions: UserCardActions;
+} | null>(null);
+
+function useUserCardCtx() {
+  const ctx = use(UserCardContext);
+  if (!ctx) throw new Error("useUserCardCtx must be used within UserCard.Provider");
+  return ctx;
+}
+
+const UserCardCheckbox = memo(() => {
+  const { state: { user, isChecked }, actions: { onToggle } } = useUserCardCtx();
+  return (
+    <div className="absolute top-3 right-3 z-20">
+      <label
+        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center cursor-pointer transition-colors duration-200 shadow-sm ${
+          isChecked ? "bg-teal-500 border-teal-500" : "bg-white/90 border-white backdrop-blur-sm"
         }`}
       >
-        {/* Checkbox */}
-        <div className="absolute top-3 right-3 z-20">
-          <label
-            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center cursor-pointer transition-colors duration-200 shadow-sm ${isChecked ? "bg-teal-500 border-teal-500" : "bg-white/90 border-white backdrop-blur-sm"}`}
-          >
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={() => onToggle(user.accountId, user.fullname_th)}
-              aria-label={`เลือก ${user.fullname_th}`}
-              className="sr-only"
-            />
-            {isChecked && (
-              <svg
-                className="w-3.5 h-3.5 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={3}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            )}
-          </label>
-        </div>
+        <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={() => onToggle(user.accountId, user.fullname_th)}
+          aria-label={`เลือก ${user.fullname_th}`}
+          className="sr-only"
+        />
+        {isChecked && (
+          <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+          </svg>
+        )}
+      </label>
+    </div>
+  );
+});
 
-        {/* Card image — clickable to select */}
-        <div
-          onClick={() => onToggle(user.accountId, user.fullname_th)}
-          className="relative h-48 sm:h-60 bg-slate-100 overflow-hidden cursor-pointer"
-          role="button"
-          aria-label={`${isChecked ? "ยกเลิกเลือก" : "เลือก"} ${user.fullname_th}`}
-        >
-          {user.imageprofile ? (
-            <img
-              src={(configs.URL_API + user.imageprofile) as string}
-              className="w-full h-full object-contain object-top transition-transform duration-300 group-hover:scale-105"
-              alt={user.fullname_th}
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-slate-50">
-              <UserIcon
-                size={56}
-                strokeWidth={0.5}
-                className="text-slate-300"
-              />
-            </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-            <h3 className="text-white font-semibold text-sm sm:text-base leading-snug truncate">
-              {user.fullname_th}
-            </h3>
-            <div className="flex items-center gap-2 mt-0.5">
-              <span className="text-white/60 text-[10px] sm:text-xs flex items-center gap-0.5">
-                <span
-                  className="material-symbols-outlined text-[11px]"
-                  aria-hidden="true"
-                >
-                  fingerprint
-                </span>
-                {user.accountId}
-              </span>
-              {user.nickname && (
-                <span className="bg-white/15 text-white text-[9px] sm:text-[10px] font-medium px-1.5 py-0.5 rounded">
-                  {user.nickname}
-                </span>
-              )}
-            </div>
-            {user.level3agency_th && (
-              <span className="bg-white/15 text-white text-[9px] sm:text-[10px] font-medium px-1.5 py-0.5 rounded">
-                {user.level3agency_th}
-              </span>
-            )}
-          </div>
+const UserCardImage = memo(() => {
+  const { state: { user, isChecked }, actions: { onToggle } } = useUserCardCtx();
+  return (
+    <div
+      onClick={() => onToggle(user.accountId, user.fullname_th)}
+      className="relative h-48 sm:h-60 bg-slate-100 overflow-hidden cursor-pointer"
+      role="button"
+      aria-label={`${isChecked ? "ยกเลิกเลือก" : "เลือก"} ${user.fullname_th}`}
+    >
+      {user.imageprofile ? (
+        <img
+          src={(configs.URL_API + user.imageprofile) as string}
+          className="w-full h-full object-contain object-top transition-transform duration-300 group-hover:scale-105"
+          alt={user.fullname_th}
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center bg-slate-50">
+          <UserIcon size={56} strokeWidth={0.5} className="text-slate-300" />
         </div>
-
-        <div className="p-4 space-y-4">
-          {/* Score label row (with apply-target button) */}
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              การประเมิน
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+        <h3 className="text-white font-semibold text-sm sm:text-base leading-snug truncate">
+          {user.fullname_th}
+        </h3>
+        <div className="flex items-center gap-2 mt-0.5">
+          <span className="text-white/60 text-[10px] sm:text-xs flex items-center gap-0.5">
+            <span className="material-symbols-outlined text-[11px]" aria-hidden="true">fingerprint</span>
+            {user.accountId}
+          </span>
+          {user.nickname && (
+            <span className="bg-white/15 text-white text-[9px] sm:text-[10px] font-medium px-1.5 py-0.5 rounded">
+              {user.nickname}
             </span>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => onApplyTarget(user.accountId, user.fullname_th)}
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-white border border-slate-200 text-teal-600 hover:bg-teal-50 transition-colors"
-                aria-label={`เติมคะแนนตามเป้าสำหรับ ${user.fullname_th}`}
-              >
-                <span
-                  className="material-symbols-outlined text-sm"
-                  aria-hidden="true"
-                >
-                  done_all
-                </span>
-                <span className="hidden sm:inline">กดเพื่อให้คะแนนตาม KPI</span>
-              </button>
-              <span className="text-[10px] font-bold text-teal-600 bg-teal-50 border border-teal-100 px-1.5 py-0.5 rounded-md">
-                เต็ม {"5"}
-              </span>
-            </div>
-          </div>
+          )}
+        </div>
+        {user.level3agency_th && (
+          <span className="bg-white/15 text-white text-[9px] sm:text-[10px] font-medium px-1.5 py-0.5 rounded">
+            {user.level3agency_th}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+});
 
-          {/* Score inputs grid */}
-          <div
-            className={`grid ${
-              scoreCount === 9
-                ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
-                : "grid-cols-3 sm:grid-cols-5"
-            } gap-1.5`}
+const UserCardScores = memo(() => {
+  const { state: { user, isChecked, scores, points }, actions: { onUpdateScore, onApplyTarget } } = useUserCardCtx();
+  const scoreCount = getScoreCount(user.level3agency_th || "");
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          การประเมิน
+        </span>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => onApplyTarget(user.accountId, user.fullname_th)}
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-white border border-slate-200 text-teal-600 hover:bg-teal-50 transition-colors"
+            aria-label={`เติมคะแนนตามเป้าสำหรับ ${user.fullname_th}`}
           >
-            {Array.from({ length: scoreCount }, (_, i) => i + 1).map((term) => {
-              const value = scores?.[String(term)] ?? "";
-              const expectationPoint = points[term - 1]?.point || "-";
-              return (
-                <div key={term} className="space-y-1">
-                  <div className="relative">
-                    <input
-                      disabled={!isChecked}
-                      type="number"
-                      min="0"
-                      max={scoreCount}
-                      value={value}
-                      aria-label={`สมรรถนะที่ ${term}`}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        let num: any = parseFloat(val);
-                        if (isNaN(num)) num = "";
-                        else if (num > scoreCount) num = scoreCount;
-                        else if (num < 0) num = 0;
-                        onUpdateScore(
-                          user.accountId,
-                          String(term),
-                          String(num),
-                        );
-                      }}
-                      className={`w-full h-9 sm:h-10 text-center text-sm font-bold rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-teal-400/50 ${
-                        isChecked
-                          ? "bg-white border-slate-200 text-teal-700 focus:border-teal-400"
-                          : "bg-slate-50 border-slate-100 text-slate-300 cursor-not-allowed"
-                      }`}
-                    />
-                    <span className="absolute -top-1.5 -left-1 w-4 h-4 bg-white border border-slate-200 shadow-sm rounded-full flex items-center justify-center text-[12px] font-bold text-slate-500">
-                      {term}
-                    </span>
-                  </div>
-                  <div className="flex flex-row items-center gap-2">
-                    <span className="text-[12px] text-teal-700 font-medium uppercase">
-                      KPI
-                    </span>
-                    <span className="text-[12px] font-bold text-teal-700 bg-slate-50 px-1 py-0.5 rounded">
-                      {expectationPoint}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Comment */}
-          <div>
-            <textarea
-              disabled={!isChecked}
-              value={currentComment}
-              onChange={(e) => onUpdateComment(user.accountId, e.target.value)}
-              placeholder="ข้อเสนอแนะ..."
-              rows={2}
-              maxLength={1000}
-              aria-label={`ข้อเสนอแนะสำหรับ ${user.fullname_th}`}
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border resize-none transition-colors focus:outline-none focus:ring-2 focus:ring-teal-400/40 ${
-                isChecked
-                  ? "bg-white border-slate-200 focus:border-teal-400"
-                  : "bg-slate-50 border-transparent text-slate-300 cursor-not-allowed"
-              }`}
-            />
-            {isChecked && (
-              <div className="flex justify-end mt-1">
-                <span className="text-[9px] font-medium text-slate-400">
-                  {currentComment.length} / 1000
-                </span>
-              </div>
-            )}
-          </div>
+            <span className="material-symbols-outlined text-sm" aria-hidden="true">done_all</span>
+            <span className="hidden sm:inline">กดเพื่อให้คะแนนตาม KPI</span>
+          </button>
+          <span className="text-[10px] font-bold text-teal-600 bg-teal-50 border border-teal-100 px-1.5 py-0.5 rounded-md">
+            เต็ม {"5"}
+          </span>
         </div>
       </div>
-    );
-  },
-);
+
+      <div
+        className={`grid ${
+          scoreCount > 5
+            ? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
+            : "grid-cols-3 sm:grid-cols-5"
+        } gap-1.5`}
+      >
+        {Array.from({ length: scoreCount }, (_, i) => i + 1).map((term) => {
+          const value = scores?.[String(term)] ?? "";
+          const expectationPoint = points[term - 1]?.point || "-";
+          return (
+            <div key={term} className="space-y-1">
+              <div className="relative">
+                <input
+                  disabled={!isChecked}
+                  type="number"
+                  min="0"
+                  max="5"
+                  value={value}
+                  aria-label={`สมรรถนะที่ ${term}`}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    let num: any = parseFloat(val);
+                    if (isNaN(num)) num = "";
+                    else if (num > 5) num = 5;
+                    else if (num < 0) num = 0;
+                    onUpdateScore(user.accountId, String(term), String(num));
+                  }}
+                  className={`w-full h-9 sm:h-10 text-center text-sm font-bold rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-teal-400/50 ${
+                    isChecked
+                      ? "bg-white border-slate-200 text-teal-700 focus:border-teal-400"
+                      : "bg-slate-50 border-slate-100 text-slate-300 cursor-not-allowed"
+                  }`}
+                />
+                <span className="absolute -top-1.5 -left-1 w-4 h-4 bg-white border border-slate-200 shadow-sm rounded-full flex items-center justify-center text-[12px] font-bold text-slate-500">
+                  {term}
+                </span>
+              </div>
+              <div className="flex flex-row items-center gap-2">
+                <span className="text-[12px] text-teal-700 font-medium uppercase">KPI</span>
+                <span className="text-[12px] font-bold text-teal-700 bg-slate-50 px-1 py-0.5 rounded">
+                  {expectationPoint}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+});
+
+const UserCardComment = memo(() => {
+  const { state: { user, isChecked, comment }, actions: { onUpdateComment } } = useUserCardCtx();
+  return (
+    <div>
+      <textarea
+        disabled={!isChecked}
+        value={comment}
+        onChange={(e) => onUpdateComment(user.accountId, e.target.value)}
+        placeholder="ข้อเสนอแนะ..."
+        rows={2}
+        maxLength={1000}
+        aria-label={`ข้อเสนอแนะสำหรับ ${user.fullname_th}`}
+        className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border resize-none transition-colors focus:outline-none focus:ring-2 focus:ring-teal-400/40 ${
+          isChecked
+            ? "bg-white border-slate-200 focus:border-teal-400"
+            : "bg-slate-50 border-transparent text-slate-300 cursor-not-allowed"
+        }`}
+      />
+      {isChecked && (
+        <div className="flex justify-end mt-1">
+          <span className="text-[9px] font-medium text-slate-400">{comment.length} / 1000</span>
+        </div>
+      )}
+    </div>
+  );
+});
+
+function UserCardProvider({
+  children,
+  state,
+  actions,
+}: {
+  children: React.ReactNode;
+  state: UserCardState;
+  actions: UserCardActions;
+}) {
+  return (
+    <UserCardContext value={{ state, actions }}>{children}</UserCardContext>
+  );
+}
+
+const UserCardFrame = memo(({ children }: { children: React.ReactNode }) => {
+  const { state: { isChecked } } = useUserCardCtx();
+  return (
+    <div
+      className={`group relative bg-white rounded-2xl overflow-hidden transition-all duration-200 ${
+        isChecked
+          ? "ring-2 ring-teal-500 ring-offset-2 shadow-lg"
+          : "shadow-sm hover:shadow-md border border-slate-200 hover:border-slate-300"
+      }`}
+    >
+      {children}
+    </div>
+  );
+});
+
+const UserCard = {
+  Provider: UserCardProvider,
+  Frame: UserCardFrame,
+  Checkbox: UserCardCheckbox,
+  Image: UserCardImage,
+  Scores: UserCardScores,
+  Comment: UserCardComment,
+};
 
 export default function SanboxPage() {
   const { userData } = useUser();
@@ -898,18 +912,31 @@ export default function SanboxPage() {
                 (r: any) => r.accountId === user.accountId,
               );
               return (
-                <UserCard
+                <UserCard.Provider
                   key={user.accountId}
-                  user={user}
-                  isChecked={isChecked}
-                  currentComment={scoresData[user.accountId]?.comment || ""}
-                  scores={scoresData[user.accountId]}
-                  points={points}
-                  onToggle={toggleRow}
-                  onUpdateScore={updateScore}
-                  onUpdateComment={updateComment}
-                  onApplyTarget={applyTargetScores}
-                />
+                  state={{
+                    user,
+                    isChecked,
+                    scores: scoresData[user.accountId],
+                    comment: scoresData[user.accountId]?.comment || "",
+                    points,
+                  }}
+                  actions={{
+                    onToggle: toggleRow,
+                    onUpdateScore: updateScore,
+                    onUpdateComment: updateComment,
+                    onApplyTarget: applyTargetScores,
+                  }}
+                >
+                  <UserCard.Frame>
+                    <UserCard.Checkbox />
+                    <UserCard.Image />
+                    <div className="p-4 space-y-4">
+                      <UserCard.Scores />
+                      <UserCard.Comment />
+                    </div>
+                  </UserCard.Frame>
+                </UserCard.Provider>
               );
             })}
             {filteredUsers.length === 0 && (

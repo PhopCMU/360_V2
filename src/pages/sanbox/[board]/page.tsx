@@ -5,7 +5,7 @@ import type { User } from "../../../model/authModel";
 import {
   Groups,
   Menus,
-  Menus_9,
+  Menus_board,
   TabsPetcmu,
   TabsPodd,
   TabsSanbox,
@@ -33,12 +33,12 @@ interface ScoreData {
 
 // Helper function to determine score count based on agency
 const getScoreCount = (level3agency_th: string): number => {
-  return level3agency_th === "ศูนย์ดูแลสัตว์เลี้ยง" ? 5 : 9;
+  return level3agency_th === "ศูนย์ดูแลสัตว์เลี้ยง" ? 5 : 12;
 };
 
 // Helper function to determine menu based on agency
 const getMenuForAgency = (level3agency_th: string | undefined) => {
-  return level3agency_th === "ศูนย์ดูแลสัตว์เลี้ยง" ? Menus : Menus_9;
+  return level3agency_th === "ศูนย์ดูแลสัตว์เลี้ยง" ? Menus : Menus_board;
 };
 
 const UserCard = memo(
@@ -191,7 +191,7 @@ const UserCard = memo(
           >
             {Array.from({ length: scoreCount }, (_, i) => i + 1).map((term) => {
               const value = scores?.[String(term)] ?? "";
-              const expectationPoint = points[term - 1]?.point || "-";
+              const expectationPoint = points[term - 1]?.point || "5";
               return (
                 <div key={term} className="space-y-1">
                   <div className="relative">
@@ -765,6 +765,21 @@ export default function SanboxBoardPage() {
                 onChange={(k) => setActiveTab(k as any)}
               />
             </div>
+            <button
+              onClick={() =>
+                window.open(
+                  "https://o365cmu-my.sharepoint.com/:b:/g/personal/sophon_m_cmu_ac_th/IQAIADbRS_NGRo5T7QnB4w0UATA7Bs8T28mfM0WClWEYTcg?e=mFwMKp",
+                  "_blank",
+                  "noopener,noreferrer",
+                )
+              }
+              className="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-colors shadow-sm"
+            >
+              <span className="material-symbols-outlined text-sm">
+                description
+              </span>
+              สมรรถนะหลัก
+            </button>
             <div className="relative flex-1">
               <span
                 className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-lg"

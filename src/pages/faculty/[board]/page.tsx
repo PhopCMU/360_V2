@@ -669,6 +669,21 @@ export default function FacultyBoardPage() {
                 onChange={(k) => setActiveTab(k as any)}
               />
             </div>
+            <button
+              onClick={() =>
+                window.open(
+                  "https://o365cmu-my.sharepoint.com/:b:/g/personal/sophon_m_cmu_ac_th/IQAIADbRS_NGRo5T7QnB4w0UATA7Bs8T28mfM0WClWEYTcg?e=mFwMKp",
+                  "_blank",
+                  "noopener,noreferrer",
+                )
+              }
+              className="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-colors shadow-sm"
+            >
+              <span className="material-symbols-outlined text-sm">
+                description
+              </span>
+              สมรรถนะหลัก
+            </button>
             <div className="relative flex-1">
               <span
                 className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-lg"
